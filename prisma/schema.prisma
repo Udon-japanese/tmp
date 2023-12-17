@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model User {
+  id            String      @id @default(cuid())
+  name          String?
+  email         String?     @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime    @default(now()) @map("created_at")
+  accounts      Account[]
+  sessions      Session[]
+  quizzes       Quiz[]
+  quizDrafts    QuizDraft[]
+
+  @@map("users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+model Choice {
+  id         Int      @id @default(autoincrement())
+  choice     String   @db.VarChar(255)
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+
+  @@index(fields: [questionId])
+  @@map("choices")
+}
+
+model Question {
+  id               Int      @id @default(autoincrement())
+  answerType       String
+  statement        String   @db.VarChar(255)
+  choices          Choice[]
+  correctAnswerId  Int?
+  correctAnswerIds String[]
+  explanation      String?  @db.VarChar(255)
+  timer            Int?
+  quiz             Quiz     @relation(fields: [quizId], references: [id])
+  quizId           String   @db.Uuid
+  correctTimes     Int      @default(0)
+  wrongTimes       Int      @default(0)
+
+  @@index(fields: [quizId])
+  @@map("questions")
+}
+
+model Quiz {
+  id          String     @id @db.Uuid
+  title       String     @db.VarChar(255)
+  description String?    @db.VarChar(255)
+  length      Int        @default(1)
+  createdBy   String
+  updatedAt   DateTime   @default(now()) @db.Timestamptz(6)
+  playTimes   Int        @default(0)
+  questions   Question[]
+  user        User       @relation(fields: [createdBy], references: [id])
+
+  @@map("quizzes")
+}
+
+model ChoiceDraft {
+  id              Int           @id @default(autoincrement())
+  choice          String        @db.VarChar(255)
+  questionDraftId Int
+  questionDtaft   QuestionDraft @relation(fields: [questionDraftId], references: [id])
+
+  @@index(fields: [questionDraftId])
+  @@map("choicedrafts")
+}
+
+model QuestionDraft {
+  id               Int           @id @default(autoincrement())
+  answerType       String?
+  statement        String?       @db.VarChar(255)
+  choiceDrafts     ChoiceDraft[]
+  correctAnswerId  Int?
+  correctAnswerIds String[]
+  explanation      String?       @db.VarChar(255)
+  timer            Int?
+  quizDraft        QuizDraft     @relation(fields: [quizDraftId], references: [quizId])
+  quizDraftId      String        @db.Uuid
+
+  @@index(fields: [quizDraftId])
+  @@map("questiondrafts")
+}
+
+model QuizDraft {
+  quizId         String          @id @db.Uuid
+  title          String          @db.VarChar(255)
+  description    String?         @db.VarChar(255)
+  createdBy      String
+  questionDrafts QuestionDraft[]
+  user           User            @relation(fields: [createdBy], references: [id])
+
+  @@map("quizdrafts")
+}
