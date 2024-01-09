@@ -1,11 +1,11 @@
 'use client';
 import UserMenu from './UserMenu';
-import { Button } from '@radix-ui/themes';
 import { useState } from 'react';
 import LoginModal from '../Login/LoginModal';
 import { Session } from 'next-auth';
 import useScroll from '@/app/hooks/useScroll';
 import Link from 'next/link';
+import { Button } from 'react-scroll';
 
 export default function Header({ session }: { session: Session | null }) {
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -32,14 +32,13 @@ export default function Header({ session }: { session: Session | null }) {
             {session ? (
               <UserMenu session={session} />
             ) : (
-              <Button
+              <button
                 onClick={() => setShowLoginModal(true)}
-                color="gray"
-                variant="outline"
-                radius="full"
+                type='button'
+                className='px-4 py-2 flex items-center justify-center rounded-md border border-white bg-black text-white hover:border-black hover:bg-white hover:text-black transition-all duration-100'
               >
                 ログイン
-              </Button>
+              </button>
             )}
           </div>
         </div>

@@ -2,7 +2,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { prisma } from '@/lib/prismadb';
 import { NextResponse } from 'next/server';
 import getCurrentUser from '@/app/actions/getCurrentUser';
-import { setTitleAndDescFormSchema } from '@/app/types';
+import { quizTitleAndDescSchema } from '@/app/types';
 
 export async function POST(req: Request) {
   const currentUser = await getCurrentUser();
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   }
 
   const body: unknown = await req.json();
-  const result = setTitleAndDescFormSchema.safeParse(body);
+  const result = quizTitleAndDescSchema.safeParse(body);
   let zodErrs = {};
 
   if (!result.success) {

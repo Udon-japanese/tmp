@@ -1,26 +1,21 @@
-version: '3.8'
+version: '3.3'
 services:
-  app:
-    build: .
-    tty: true
-    ports:
-      - 3000:3000
-      - 5555:5555
-    volumes:
-      - .:/app
-      - /app/node_modules
-    depends_on:
-      - db
   db:
-    build: 
+    build:
       context: "."
       dockerfile: "db.Dockerfile"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: realtime_quiz_app
+    ports:
+      - 5432:5432
     volumes:
       - realtime-quiz-app-data:/var/lib/postgresql/data
+    networks:
+      - default_network
+networks:
+  default_network:
 volumes:
   realtime-quiz-app-data:
     external: true

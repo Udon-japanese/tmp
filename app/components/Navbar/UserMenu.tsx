@@ -26,7 +26,7 @@ export default function UserMenu({ session }: { session: Session | null }) {
     <div className="relative inline-block text-left">
       <Popover
         content={
-          <div className="w-full rounded-md bg-white p-2 sm:w-56">
+          <div className="w-full rounded-md bg-white p-2 md:w-56">
             <div className="p-2">
               {session.user?.name && (
                 <p className="truncate text-sm font-medium text-gray-900">
@@ -63,7 +63,7 @@ export default function UserMenu({ session }: { session: Session | null }) {
       >
         <button
           onClick={() => setOpenPopover(!openPopover)}
-          className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-300 transition-all duration-75 focus:outline-none active:scale-95 sm:h-9 sm:w-9"
+          className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-300 transition-all duration-75 focus:outline-none active:scale-95 md:h-9 md:w-9"
         >
           <Image
             alt={`${session.user?.name} のアイコン`}

@@ -82,9 +82,9 @@ model Question {
   statement        String   @db.VarChar(255)
   choices          Choice[]
   correctAnswerId  Int?
-  correctAnswerIds String[]
+  correctAnswerIds Int[]
   explanation      String?  @db.VarChar(255)
-  timer            Int?
+  timer            Int      @default(0)
   quiz             Quiz     @relation(fields: [quizId], references: [id])
   quizId           String   @db.Uuid
   correctTimes     Int      @default(0)
@@ -120,13 +120,13 @@ model ChoiceDraft {
 
 model QuestionDraft {
   id               Int           @id @default(autoincrement())
-  answerType       String?
-  statement        String?       @db.VarChar(255)
+  answerType       String
+  statement        String        @db.VarChar(255)
   choiceDrafts     ChoiceDraft[]
   correctAnswerId  Int?
-  correctAnswerIds String[]
+  correctAnswerIds Int[]
   explanation      String?       @db.VarChar(255)
-  timer            Int?
+  timer            Int           @default(0)
   quizDraft        QuizDraft     @relation(fields: [quizDraftId], references: [quizId])
   quizDraftId      String        @db.Uuid
 

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Quiz } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { setTitleAndDescFormSchema, SetTitleAndDescFormType } from '../types';
+import { quizTitleAndDescSchema, QuizTitleAndDesc } from '../types';
 
 export default function CreateQuizModal({
   showCreateQuizModal,
@@ -26,13 +26,13 @@ export default function CreateQuizModal({
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<SetTitleAndDescFormType>({
+  } = useForm<QuizTitleAndDesc>({
     mode: 'onChange',
-    resolver: zodResolver(setTitleAndDescFormSchema, { async: true }),
+    resolver: zodResolver(quizTitleAndDescSchema, { async: true }),
     defaultValues,
   });
 
-  const onSubmit = async (data: SetTitleAndDescFormType) => {
+  const onSubmit = async (data: QuizTitleAndDesc) => {
     setCreateClicked(true);
     const quiz = await fetcher<Quiz>('/api/quizzes/new', {
       method: 'POST',
@@ -50,10 +50,10 @@ export default function CreateQuizModal({
       showModal={showCreateQuizModal}
       setShowModal={setShowCreateQuizModal}
     >
-      <div className="w-full overflow-hidden shadow-xl sm:max-w-md sm:rounded-2xl sm:border sm:border-gray-200">
+      <div className="w-full overflow-hidden md:w-[60vw] md:rounded-2xl md:border md:border-gray-300">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col items-center space-y-3 border-b border-gray-200 bg-white p-4 text-center">
-            <h3 className="text-2xl font-bold text-center">クイズを作る</h3>
+          <div className="flex flex-col space-y-3 border-gray-200 bg-white p-4">
+            <h3 className="text-2xl font-bold text-start mb-4">クイズを作る</h3>
             <div className="mt-5 w-full">
               <div className="mb-5">
                 <label
@@ -97,14 +97,14 @@ export default function CreateQuizModal({
               </div>
             </div>
           </div>
-          <div className="flex flex-col space-y-4 bg-gray-50 px-4 py-8">
+          <div className="p-4">
             <button
               type="submit"
               disabled={createClicked || !isValid}
               className={`${
                 createClicked || !isValid
-                  ? 'cursor-not-allowed border-gray-200 bg-gray-100'
-                  : 'border border-gray-200 bg-white text-black hover:bg-gray-50'
+                ? 'text-black cursor-not-allowed border-gray-200 bg-gray-300'
+                : 'border border-gray-200 bg-green-800 text-white hover:bg-green-700'
               } flex h-10 w-full items-center justify-center space-x-3 rounded-md border text-sm shadow-sm transition-all duration-75 focus:outline-none`}
             >
               {createClicked ? (

@@ -1,11 +1,6 @@
 'use client';
 import useMediaQuery from '@/app/hooks/useMediaQuery';
 import { useState } from 'react';
-import {
-  MdOutlineArrowBackIos,
-  MdOutlineArrowForwardIos,
-} from 'react-icons/md';
-import { FaEllipsisV } from 'react-icons/fa';
 
 export default function QuestionSettingMenu() {
   const [showMenu, setShowMenu] = useState(false);
@@ -26,11 +21,7 @@ export default function QuestionSettingMenu() {
           type="button"
         >
           <div className="mr-3">
-            {showMenu ? (
-              <MdOutlineArrowForwardIos size={20} />
-            ) : (
-              <MdOutlineArrowBackIos size={20} />
-            )}
+gf
           </div>
         </button>
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
@@ -42,7 +33,7 @@ export default function QuestionSettingMenu() {
 
   return (
     <button type="button" className='shadow bg-white rounded-full p-2.5 mx-4'>
-      <FaEllipsisV size={20} />
+     s
     </button>
   );
 }

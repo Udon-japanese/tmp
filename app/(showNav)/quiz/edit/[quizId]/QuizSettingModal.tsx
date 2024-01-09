@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { fetcher } from '@/lib/utils';
 import {
   QuizDraftWithQuestionDraftsAndChoiceDrafts,
-  SetTitleAndDescFormType,
-  setTitleAndDescFormSchema,
+  QuizTitleAndDesc,
+  quizTitleAndDescSchema,
 } from '@/app/types';
 import { useRouter } from 'next/navigation';
 
@@ -35,13 +35,13 @@ export default function QuizSettingModal({
     register,
     handleSubmit,
     formState: { errors, isDirty, isValid },
-  } = useForm<SetTitleAndDescFormType>({
+  } = useForm<QuizTitleAndDesc>({
     mode: 'onChange',
-    resolver: zodResolver(setTitleAndDescFormSchema),
+    resolver: zodResolver(quizTitleAndDescSchema),
     defaultValues,
   });
 
-  const onSubmit = async (data: SetTitleAndDescFormType) => {
+  const onSubmit = async (data: QuizTitleAndDesc) => {
     setSaveClicked(true);
     await fetcher<Quiz>('/api/quizzes/update/quiz', {
       method: 'POST',
@@ -65,16 +65,16 @@ export default function QuizSettingModal({
       showModal={showQuizSettingModal}
       setShowModal={setShowQuizSettingModal}
     >
-      <div className="w-full overflow-hidden shadow-xl sm:max-w-md sm:rounded-2xl sm:border sm:border-gray-200">
+      <div className="w-full overflow-hidden md:w-[80vw] md:max-w-lg md:rounded-2xl md:border md:border-gray-300">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="border-b border-gray-200 bg-white p-4 text-center">
-            <div className="text-lg text-start">クイズの設定</div>
+            <div className="text-2xl font-bold text-start">クイズの設定</div>
             <div className="flex flex-col">
               <div className="mt-5 w-full">
                 <div className="mb-5">
                   <label
                     htmlFor="title"
-                    className="block mb-2 text-sm font-medium text-gray-900 text-start"
+                    className="block mb-2 text-sm text-gray-900 text-start font-semibold"
                   >
                     クイズのタイトル
                   </label>
@@ -94,7 +94,7 @@ export default function QuizSettingModal({
                 <div className="mb-5">
                   <label
                     htmlFor="description"
-                    className="block mb-2 text-sm font-medium text-gray-900 text-start"
+                    className="block mb-2 text-sm text-gray-900 text-start font-semibold"
                   >
                     クイズの説明(任意)
                   </label>

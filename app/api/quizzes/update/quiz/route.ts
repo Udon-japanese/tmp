@@ -1,10 +1,10 @@
 import { prisma } from '@/lib/prismadb';
 import { NextResponse } from 'next/server';
 import getCurrentUser from '@/app/actions/getCurrentUser';
-import { setTitleAndDescFormSchema } from '@/app/types';
+import { quizTitleAndDescSchema } from '@/app/types';
 import { z } from 'zod';
 
-const updatedQuizDataSchema = setTitleAndDescFormSchema.extend({
+const updatedQuizDataSchema = quizTitleAndDescSchema.extend({
   id: z.string().uuid({ message: 'クイズidはUUIDである必要があります' }),
 });
 

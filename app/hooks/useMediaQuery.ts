@@ -30,11 +30,11 @@ export default function useMediaQuery() {
 
       const calcBreakPoint = (width: number) => {
         return {
-          isSm: width >= 640,
-          isMd: width >= 768,
-          isLg: width >= 1024,
-          isXl: width >= 1280,
-          is2xl: width >= 1536,
+          isSm: window.matchMedia('(min-width: 640px)').matches,
+          isMd: window.matchMedia('(min-width: 768px)').matches,
+          isLg: window.matchMedia('(min-width: 1024px)').matches,
+          isXl: window.matchMedia('(min-width: 1280px)').matches,
+          is2xl:window.matchMedia('(min-width: 1536px)').matches,
         };
       };
 
@@ -54,10 +54,36 @@ export default function useMediaQuery() {
     };
   }, []);
 
+  const width = dimensions?.width || 0;
+  const height = dimensions?.height || 0;
+
   return {
     device,
     width: dimensions?.width,
     height: dimensions?.height,
+    vh: (percentage: number) => {
+      return (percentage * height) / 100;
+    },
+    vw: (percentage: number) => {
+      return (percentage * width) / 100;
+    },
+    vMin: (percentage: number) => {
+      const min = Math.min(width, height);
+      return (percentage * min) / 100;
+    },
+    vMax: (percentage: number) => {
+      const max = Math.max(width, height);
+      return (percentage * max) / 100;
+    },
+    maxPx: (px: number, minPx: number) => {
+      return Math.max(px, minPx);
+    },
+    minPx: (px: number, maxPx: number) => {
+      return Math.min(px, maxPx);
+    },
+    clampPx: (minPx: number, px: number, maxPx: number) => {
+      return Math.min(Math.max(px, minPx), maxPx);
+    },
     isMobile: device === 'mobile',
     isTablet: device === 'tablet',
     isDesktop: device === 'desktop',
